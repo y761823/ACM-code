@@ -16,7 +16,7 @@ int n, D, T, res;
 
 void init() {
     memset(head + 1, -1, n * sizeof(int));
-    res = ecnt = 0;
+    ecnt = 0;
 }
 
 void add_edge(int u, int v) {
@@ -125,6 +125,7 @@ int main() {
         }
 
         memset(del + 1, 0, n * sizeof(bool));
+        res = 1;
         solve(1);
         printf("Case #%d: %d\n", t, res);
     }
