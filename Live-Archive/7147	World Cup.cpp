@@ -2,7 +2,7 @@
 #define longformat "%I64d"
 #else
 #define longformat "%lld"
-#endif // OYK_JUDGE
+#endif
 
 #include <cstdio>
 #include <algorithm>
