@@ -21,18 +21,12 @@ int solve() {
     memset(dp, 0, (m + 1) * sizeof(int));
     for(int i = 0; i < n; ++i) {
         memset(vis, 0, (m + 1) * sizeof(int));
-        int cnt = 1, sum = m / w[i];
-        while(sum > 0) {
-            cnt = min(cnt, sum);
-            for(int j = m - cnt * w[i]; j >= 0; --j) {
-                update_max(vis[j + cnt * w[i]], max(dp[j], vis[j]) + cnt * a[i]);
-            }
-            sum -= cnt;
-            cnt <<= 1;
+        for(int j = w[i]; j <= m; ++j) {
+            int pre = j - w[i];
+            update_max(vis[j], max(dp[pre], vis[pre]) + a[i]);
         }
-
-        for(int j = 0; j <= m; ++j)
-            if(vis[j]) update_max(dp[j], vis[j] + b[i]);
+        for(int j = w[i]; j <= m; ++j)
+            update_max(dp[j], vis[j] + b[i]);
     }
     return dp[m];
 }
