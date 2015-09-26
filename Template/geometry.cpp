@@ -55,7 +55,7 @@ Point rotate(const Point &p, double angle, const Point &o = Point(0, 0)) {
 
 double cosIncludeAngle(const Point &a, const Point &b, const Point &o) {
     Point p1 = a - o, p2 = b - o;
-    double t = norm(p1) * norm(p2);
+    double t = abs(p1) * abs(p2);
     return sgn(t) ? dot(p1, p2) / t : 0;
 }
 
