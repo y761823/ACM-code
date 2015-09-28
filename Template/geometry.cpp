@@ -11,10 +11,18 @@ const double EPS = 1e-10;
 int sgn(double x) {
     return (x > EPS) - (x < -EPS);
 }
+double sqr(double x) {
+    return x * x;
+}
 
 typedef complex<double> Point;
 #define x real()
 #define y imag()
+
+bool cmp_y(const Point &a, const Point &b) {
+    if(a.y != b.y) return a.y < b.y;
+    return a.x < b.x;
+}
 
 void read(Point &p) {
     static double xx, yy;
@@ -27,6 +35,9 @@ Point normal(Point p) {
 int type(const Point &p) {
     if(sgn(p.y)) return p.y < 0;
     return p.x < 0;
+}
+double magnitude(const Point &a, const Point &b) {
+    return abs(a - b);
 }
 double dot(const Point &a, const Point &b) {
     return a.x * b.x + a.y * b.y;
@@ -73,13 +84,13 @@ bool isIntersected(const Point &s1, const Point &e1, const Point &s2, const Poin
 }
 
 struct Line {
-    Point s, e; double angle;
-    Line(Point s = 0, Point e = 0): s(s), e(e) {}
+    Point st, ed; double angle;
+    Line(Point st = 0, Point ed = 0): st(st), ed(ed) {}
     double get_angle() {
-        return angle = arg(e - s);
+        return angle = arg(ed - st);
     }
     Point operator * (const Line &rhs) const {
-        return intersection(s, e, rhs.s, rhs.e);
+        return intersection(st, ed, rhs.st, rhs.ed);
     }
     bool operator < (const Line &rhs) const {
         return angle < rhs.angle;
@@ -153,12 +164,33 @@ void half_planes_cross(vector<Line> &l, int n, Polygon &poly) {
     vector<Point> q(n);
     int head = 0, tail = 0;
     for(int i = 1; i < n; ++i) {
-        while(head != tail && sgn(cross(l[i].s, l[i].e, q[tail - 1])) <= 0) --tail;
-        while(head != tail && sgn(cross(l[i].s, l[i].e, q[head])) <= 0) ++head;
+        while(head != tail && sgn(cross(l[i].st, l[i].ed, q[tail - 1])) <= 0) --tail;
+        while(head != tail && sgn(cross(l[i].st, l[i].ed, q[head])) <= 0) ++head;
         l[++tail] = l[i];
         if(head < tail) q[tail - 1] = l[tail - 1] * l[tail];
     }
-    while(head != tail && sgn(cross(l[head].s, l[head].e, q[tail - 1])) <= 0) --tail;
+    while(head != tail && sgn(cross(l[head].st, l[head].ed, q[tail - 1])) <= 0) --tail;
     if(head < tail) q[tail] = l[head] * l[tail];
     poly.assign(q.begin() + head, q.begin() + tail + 1);
+}
+
+//the convex hull is clockwise
+void Graham_scan(Point p[], int n, int *stk, int &top) {//stk[0] = stk[top]
+    sort(p, p + n, cmp_y);
+    top = 1;
+    stk[0] = 0; stk[1] = 1;
+    for(int i = 2; i < n; ++i) {
+        while(top && cross(p[i], p[stk[top]], p[stk[top - 1]]) <= 0) --top;
+        stk[++top] = i;
+    }
+    int len = top;
+    stk[++top] = n - 2;
+    for(int i = n - 3; i >= 0; --i) {
+        while(top != len && cross(p[i], p[stk[top]], p[stk[top - 1]]) <= 0) --top;
+        stk[++top] = i;
+    }
+}
+
+int main() {
+
 }
