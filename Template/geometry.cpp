@@ -175,18 +175,18 @@ void half_planes_cross(vector<Line> &l, int n, Polygon &poly) {
 }
 
 //the convex hull is clockwise
-void Graham_scan(Point p[], int n, int *stk, int &top) {//stk[0] = stk[top]
+void Graham_scan(Point p[], int n, int stk[], int &top) {//stk[0] = stk[top]
     sort(p, p + n, cmp_y);
     top = 1;
     stk[0] = 0; stk[1] = 1;
     for(int i = 2; i < n; ++i) {
-        while(top && cross(p[i], p[stk[top]], p[stk[top - 1]]) <= 0) --top;
+        while(top && cross(p[stk[top - 1]], p[stk[top]], p[i]) <= 0) --top;
         stk[++top] = i;
     }
     int len = top;
     stk[++top] = n - 2;
     for(int i = n - 3; i >= 0; --i) {
-        while(top != len && cross(p[i], p[stk[top]], p[stk[top - 1]]) <= 0) --top;
+        while(top != len && cross(p[stk[top - 1]], p[stk[top]], p[i]) <= 0) --top;
         stk[++top] = i;
     }
 }
