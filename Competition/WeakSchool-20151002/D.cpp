@@ -148,13 +148,7 @@ vector<int> adjs[MAXV];
 LCT::Node* root[MAXV];
 int w[MAXV];
 int n, q;
-/*
-void dfs_build(int u, int f) {
-    root[u] = lct.new_node(w[u], root[f]);
-    foreach(v, adjs[u]) if(*v != f)
-        dfs_build(*v, u);
-}
-*/
+
 void bfs_build() {
     root[1] = lct.new_node(w[1], lct.nil);
     queue<int> que; que.push(1);
@@ -168,10 +162,6 @@ void bfs_build() {
 }
 
 int main() {
-#ifdef OYK_JUDGE
-    //freopen("H:/in.txt", "r", stdin);
-    //freopen("H:/out.txt", "w", stdout);
-#endif // OYK_JUDGE
     scanf("%d%d", &n, &q);
     for(int i = 1; i <= n; ++i) scanf("%d", &w[i]);
     for(int i = 1, u, v; i < n; ++i) {
