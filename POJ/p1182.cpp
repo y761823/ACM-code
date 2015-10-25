@@ -6,7 +6,7 @@
 using namespace std;
 typedef long long LL;
 
-const int MAXN = 500010;
+const int MAXN = 50010;
 
 int fa[MAXN], rela[MAXN];
 int n, k;
@@ -29,16 +29,10 @@ bool check(int d, int x, int y) {
     if(x > n || y > n) return false;
     int fx = find_set(x), fy = find_set(y);
     if(fx == fy) {
-        if(d == 1) return rela[x] == rela[y];
-        return (rela[x] + 2) % 3 == rela[y];
+        return (rela[y] + d) % 3 == rela[x];
     } else {
-        if(d == 1) {
-            fa[fy] = fx;
-            rela[fy] = (rela[x] - rela[y] + 3) % 3;
-        } else {
-            fa[fy] = fx;
-            rela[fy] = (rela[x] - rela[y] + 2) % 3;
-        }
+        fa[fy] = fx;
+        rela[fy] = (rela[x] - rela[y] + 3 - d) % 3;
         return true;
     }
 }
@@ -49,7 +43,7 @@ int main() {
     int res = 0;
     for(int i = 0, d, x, y; i < k; ++i) {
         scanf("%d%d%d", &d, &x, &y);
-        res += !check(d, x, y);
+        res += !check(d - 1, x, y);
     }
     printf("%d\n", res);
 }
