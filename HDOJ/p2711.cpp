@@ -15,8 +15,7 @@ int main() {
     while(scanf("%d", &n) != EOF) {
         for(int i = 2; i <= n; ++i) scanf("%d", &pre[i]);
         tree.clear();
-        for(int i = 1; i <= n; ++i)
-            tree.insert(i);
+        for(int i = 1; i <= n; ++i) tree.insert(i);
         for(int i = n; i > 0; --i) {
             int t = *tree.find_by_order(pre[i]);
             ans[i] = t;
